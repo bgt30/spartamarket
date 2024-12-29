@@ -138,112 +138,36 @@ def follow(request, user_id):
 
 ### 1. 사용자 관리 (Accounts)
 
-#### 1.1 회원가입
-- **URL**: `/accounts/signup/`
-- **Method**: `POST`
-- **Request Body**:
-  ```json
-  {
-    "username": "string",
-    "email": "user@example.com",
-    "password1": "string",
-    "password2": "string"
-  }
-  ```
-- **Response**: 성공 시 로그인 페이지로 리다이렉트
-
-#### 1.2 로그인
-- **URL**: `/accounts/login/`
-- **Method**: `POST`
-- **Request Body**:
-  ```json
-  {
-    "username": "string",
-    "password": "string"
-  }
-  ```
-- **Response**: 성공 시 메인 페이지로 리다이렉트
-
-#### 1.3 프로필 조회
-- **URL**: `/accounts/profile/<int:user_id>/`
-- **Method**: `GET`
-- **Response**: 프로필 페이지 렌더링
-
-#### 1.4 프로필 수정
-- **URL**: `/accounts/profile/update/`
-- **Method**: `POST`
-- **Request Body**: `multipart/form-data`
-  ```json
-  {
-    "profile_image": "file"
-  }
-  ```
-- **Response**: 성공 시 프로필 페이지로 리다이렉트
-
-#### 1.5 팔로우/언팔로우
-- **URL**: `/accounts/profile/<int:user_id>/follow/`
-- **Method**: `POST`
-- **Response**: 성공 시 프로필 페이지로 리다이렉트
+| 기능 | Method | URL | Request | Response |
+|------|--------|-----|---------|-----------|
+| 회원가입 | POST | `/accounts/signup/` | ```json { "username": "string", "email": "user@example.com", "password1": "string", "password2": "string" }``` | 성공 시 로그인 페이지로 리다이렉트 |
+| 로그인 | POST | `/accounts/login/` | ```json { "username": "string", "password": "string" }``` | 성공 시 메인 페이지로 리다이렉트 |
+| 프로필 조회 | GET | `/accounts/profile/<int:user_id>/` | - | 프로필 페이지 렌더링 |
+| 프로필 수정 | POST | `/accounts/profile/update/` | `multipart/form-data` ```json { "profile_image": "file" }``` | 성공 시 프로필 페이지로 리다이렉트 |
+| 팔로우/언팔로우 | POST | `/accounts/profile/<int:user_id>/follow/` | - | 성공 시 프로필 페이지로 리다이렉트 |
 
 ### 2. 상품 관리 (Products)
 
-#### 2.1 상품 목록 조회
-- **URL**: `/products/`
-- **Method**: `GET`
-- **Query Parameters**:
-  - `sort`: `-created_at` (최신순) 또는 `popular` (인기순)
-  - `q`: 검색어 (선택)
-- **Response**: 상품 목록 페이지 렌더링
-
-#### 2.2 상품 상세 조회
-- **URL**: `/products/<int:product_id>/`
-- **Method**: `GET`
-- **Response**: 상품 상세 페이지 렌더링
-
-#### 2.3 상품 등록
-- **URL**: `/products/create/`
-- **Method**: `POST`
-- **Request Body**:
-  ```json
-  {
-    "title": "string",
-    "description": "string",
-    "hashtags": "string" // 쉼표로 구분된 해시태그
-  }
-  ```
-- **Response**: 성공 시 상품 상세 페이지로 리다이렉트
-
-#### 2.4 상품 수정
-- **URL**: `/products/<int:product_id>/update/`
-- **Method**: `POST`
-- **Request Body**:
-  ```json
-  {
-    "title": "string",
-    "description": "string",
-    "hashtags": "string" // 쉼표로 구분된 해시태그
-  }
-  ```
-- **Response**: 성공 시 상품 상세 페이지로 리다이렉트
-
-#### 2.5 상품 삭제
-- **URL**: `/products/<int:product_id>/delete/`
-- **Method**: `POST`
-- **Response**: 성공 시 상품 목록 페이지로 리다이렉트
-
-#### 2.6 상품 찜하기/취소
-- **URL**: `/products/<int:product_id>/like/`
-- **Method**: `POST`
-- **Response**: 성공 시 상품 상세 페이지로 리다이렉트
+| 기능 | Method | URL | Request | Response |
+|------|--------|-----|---------|-----------|
+| 상품 목록 조회 | GET | `/products/` | Query Parameters: `sort`: `-created_at` 또는 `popular`, `q`: 검색어 | 상품 목록 페이지 렌더링 |
+| 상품 상세 조회 | GET | `/products/<int:product_id>/` | - | 상품 상세 페이지 렌더링 |
+| 상품 등록 | POST | `/products/create/` | ```json { "title": "string", "description": "string", "hashtags": "string" }``` | 성공 시 상품 상세 페이지로 리다이렉트 |
+| 상품 수정 | POST | `/products/<int:product_id>/update/` | ```json { "title": "string", "description": "string", "hashtags": "string" }``` | 성공 시 상품 상세 페이지로 리다이렉트 |
+| 상품 삭제 | POST | `/products/<int:product_id>/delete/` | - | 성공 시 상품 목록 페이지로 리다이렉트 |
+| 상품 찜하기/취소 | POST | `/products/<int:product_id>/like/` | - | 성공 시 상품 상세 페이지로 리다이렉트 |
 
 ### 3. 응답 코드
-- `200`: 성공
-- `201`: 생성 성공
-- `400`: 잘못된 요청
-- `401`: 인증 필요
-- `403`: 권한 없음
-- `404`: 리소스 없음
-- `500`: 서버 오류
+
+| 코드 | 설명 |
+|------|------|
+| 200 | 성공 |
+| 201 | 생성 성공 |
+| 400 | 잘못된 요청 |
+| 401 | 인증 필요 |
+| 403 | 권한 없음 |
+| 404 | 리소스 없음 |
+| 500 | 서버 오류 |
 
 ### 4. 인증
 - 대부분의 API는 로그인이 필요합니다
