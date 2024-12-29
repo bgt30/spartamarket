@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>{{ product.title }}</h2>
+            <hr>
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="text-muted">판매자: {{ product.owner.username }}</p>
+                    <p class="text-muted">등록일: {{ product.created_at|date:"Y-m-d H:i" }}</p>
+                    
+                    <!-- 해시태그 표시 -->
+                    <div class="hashtags">
+                        {% for tag in product.hashtags.all %}
+                            <span class="badge bg-primary">#{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if user == product.owner %}
+                        <a href="{% url 'products:product_update' product.id %}" class="btn btn-primary">수정</a>
+                        <a href="{% url 'products:product_delete' product.id %}" class="btn btn-danger">삭제</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

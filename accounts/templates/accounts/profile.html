@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="profile-header">
+    {% if profile_user.profile_image %}
+        <img src="{{ profile_user.profile_image.url }}" alt="프로필 이미지" style="width: 150px; height: 150px; border-radius: 50%;">
+    {% else %}
+        <img src="/media/profile_images/user.png" alt="기본 프로필 이미지" style="width: 150px; height: 150px; border-radius: 50%;">
+    {% endif %}
+    
+    <h2>{{ profile_user.username }}님의 프로필</h2>
+    
+    {% if user == profile_user %}
+        <a href="{% url 'accounts:profile_update' %}" class="btn btn-primary">프로필 수정</a>
+    {% endif %}
+</div>
+
+<p>가입일: {{ profile_user.date_joined|date:"Y-m-d H:i" }}</p>
+<p>팔로워 수: {{ profile_user.follower_count }}</p>
+<p>팔로잉 수: {{ profile_user.following_count }}</p>
+
+{% if user.is_authenticated and user != profile_user %}
+    <form action="{% url 'accounts:follow' profile_user.id %}" method="POST">
+        {% csrf_token %}
+        {% if is_following %}
+            <button type="submit" class="btn btn-danger">언팔로우</button>
+        {% else %}
+            <button type="submit" class="btn btn-primary">팔로우</button>
+        {% endif %}
+    </form>
+{% endif %}
+
+<hr>
+<h3>내가 등록한 물품</h3>
+{% if profile_user.my_products.all %}
+  <ul>
+    {% for product in profile_user.my_products.all %}
+      <li>
+        <a href="{% url 'products:product_detail' product.id %}">{{ product.title }}</a>
+        ({{ product.created_at|date:"m/d H:i" }})
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>등록한 물품이 없습니다.</p>
+{% endif %}
+
+<hr>
+<h3>내가 찜한 물품</h3>
+{% if profile_user.liked_products.all %}
+  <ul>
+    {% for product in profile_user.liked_products.all %}
+      <li>
+        <a href="{% url 'products:product_detail' product.id %}">{{ product.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>찜한 물품이 없습니다.</p>
+{% endif %}
+{% endblock %}
+

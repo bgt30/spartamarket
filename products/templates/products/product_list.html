@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>상품 목록</h2>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <!-- 검색 폼 -->
+        <form method="get" class="d-flex">
+            <input type="text" name="q" class="form-control me-2" 
+                   placeholder="제목, 설명, 작성자, 해시태그 검색" 
+                   value="{{ query }}">
+            <button type="submit" class="btn btn-outline-primary">검색</button>
+            
+            <!-- 정렬 옵션을 hidden input으로 유지 -->
+            {% if current_sort %}
+                <input type="hidden" name="sort" value="{{ current_sort }}">
+            {% endif %}
+        </form>
+    </div>
+    <div class="col-md-4">
+        <!-- 정렬 폼 -->
+        <form method="get" class="d-flex">
+            <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="sort" id="latest" 
+                       value="-created_at" {% if current_sort == '-created_at' %}checked{% endif %}>
+                <label class="btn btn-outline-primary" for="latest">최신순</label>
+
+                <input type="radio" class="btn-check" name="sort" id="popular" 
+                       value="popular" {% if current_sort == 'popular' %}checked{% endif %}>
+                <label class="btn btn-outline-primary" for="popular">인기순</label>
+            </div>
+            <button type="submit" class="btn btn-secondary ms-2">정렬</button>
+            
+            <!-- 검색어를 hidden input으로 유지 -->
+            {% if query %}
+                <input type="hidden" name="q" value="{{ query }}">
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<div class="mb-3">
+    <a href="{% url 'products:product_create' %}" class="btn btn-primary">+ 새 상품 등록</a>
+</div>
+
+{% if query %}
+    <div class="alert alert-info">
+        '{{ query }}' 검색 결과 ({{ products|length }}개)
+    </div>
+{% endif %}
+
+<hr>
+{% if products %}
+  <div class="row">
+    {% for product in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{% url 'products:product_detail' product.id %}">{{ product.title }}</a>
+            </h5>
+            <p class="card-text">
+              작성자: <a href="{% url 'accounts:profile' product.owner.id %}">{{ product.owner.username }}</a>
+            </p>
+            <div class="hashtags mb-2">
+                {% for tag in product.hashtags.all %}
+                    <span class="badge bg-primary">#{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+            <p class="card-text">
+              <small class="text-muted">
+                조회수: {{ product.view_count }} | 
+                찜수: {{ product.like_count }} |
+                작성일: {{ product.created_at|date:"Y/m/d H:i" }}
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  {% if query %}
+    <p>검색 결과가 없습니다.</p>
+  {% else %}
+    <p>등록된 상품이 없습니다.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}
+
