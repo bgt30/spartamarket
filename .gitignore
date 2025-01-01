@@ -380,5 +380,8 @@ $RECYCLE.BIN/
 .DS_Store
 .DS_Store
 
-media/profile_images/
-profile_images/
+# profile_images 디렉토리의 모든 파일을 무시
+media/profile_images/*
+
+# user.png는 예외로 추적
+!media/profile_images/user.png
