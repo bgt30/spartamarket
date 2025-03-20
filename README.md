@@ -1,5 +1,3 @@
-~~디렉토리 이동하다 git 오류가 났는데 뭘 해도 해결이 안됐습니다.. 결국 git init 해서 commit 내역이 거의 없습니다..~~
-
 # Sparta Market
 ![메인 페이지](media/home.png)
 
@@ -206,6 +204,3 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
-
-## 📜 라이센스
-This project is licensed under the MIT License
